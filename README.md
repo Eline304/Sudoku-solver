@@ -63,7 +63,7 @@ Breaking down complex problems into smaller steps.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com
+   git clone https://github.com/Eline304/Sudoku-solver.git
    ```
 2. Navigate to the project's folder.
 3. Run the application.
