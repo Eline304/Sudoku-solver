@@ -1,4 +1,4 @@
-# SkyDiary
+# Sudoku solver
 
 A terminal-based Sudoku solver, built using recursive backgracking.
 It takes an unsolved sudoku, and uses backtracking to explore possible values and find a solution.
