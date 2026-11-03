@@ -28,6 +28,38 @@ unsolvable_board = [
     [0, 0, 7, 0, 0, 0, 0, 0, 0]
 ] # This one should take roughly 1 minute to detect it's not solvable (comment out the print and sleep statements)
 
+test_board = [
+    [0, 1, 4, 0, 7, 0, 8, 0, 0],
+    [3, 5, 0, 2, 0, 6, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+    [0, 0, 0, 0, 4, 2, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 0, 3],
+    [1, 0, 9, 0, 0, 3, 0, 0, 7],
+
+    [0, 4, 0, 3, 0, 6, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 8, 0],
+    [0, 0, 3, 4, 0, 0, 0, 0, 0]
+] # This one should take roughly 1 minute to detect it's not solvable (comment out the print and sleep statements)
+
+
+empty_board = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 9, 0, 0, 3, 0, 0, 0],
+
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+] # This is an empty board
+
+
+
+
 sleep_time = 0.5
 
 def print_board(board):
@@ -43,31 +75,63 @@ def print_board(board):
     print("")
 
 
+def is_row_valid(board, row, num):
+    if num in board[row]:
+        return False
+    return True
+
+
+def is_column_valid(board, column, num):
+    for number in range(9):
+        if board[number][column] == num:
+            return False
+    return True
+
+def is_square_valid(board, row, column, number):
+    squarex = row //3
+    squarey = column //3
+
+    for row in range(squarex*3, squarex*3+3):
+        for column in range(squarey*3, squarey*3+3):
+            if board[row][column] == number:
+                return False
+    return True
+
+def is_valid(board, row, column, number):
+    return is_row_valid(board, row, number) and is_column_valid(board, column, number) and is_square_valid(board, row, column, number)
+
+
+def find_empty_square(board):
+    for row_num, row in enumerate(board):
+        for col_num, col in enumerate(row):
+            if not col:
+                return row_num, col_num
+
+      
 def solve(board : list[list[int]]):
     """Solve a 9x9 sudoku by filling in all empty (0) squares in the given 2D array.
 
     Return True when successful or False otherwise.
     """
-
-    # TODO!
-
-    # Hints:
-    # - Pick an empty (0) square. In a loop try to put 1 through 9 in the square.
-    #   Check if this doesn't violate any Sudoku-conditions. If not, recurse! If the
-    #   recursive solve() was successful, we're done. If not, remove the number, and
-    #   continue searching.
-    # - For each step do this to understand what's going on:
-    #     print_board(board)
-    #     sleep(sleep_time)
-    # - You will want to create a couple of helper function to keep your code understandable.
+    if not find_empty_square(board):
+        return True
     
-    return False # Not solvable
+    empty_square = find_empty_square(board)
 
-
+    for number in range(1, 10):
+        if is_valid(board, empty_square[0], empty_square[1], number):
+            board[empty_square[0]][empty_square[1]] = number
+            print_board(board)
+            sleep(0.05)
+            if solve(board):
+                return True
+            board[empty_square[0]][empty_square[1]] = 0
+    return False
 
 if __name__ == "__main__":
     print_board(board)
     if solve(board):
         print("Solved!")
+        print_board(board)
     else:
         print("No solution.")
